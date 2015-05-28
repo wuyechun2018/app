@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>APP</title>
+<script type="text/javascript" src="jquery-1.9.1.js"></script>
+
+<style type="text/css">
+body{
+	font-size:16px;
+	background-color: RGB(199,237,204)
+
+}
+
+.top {
+	position: absolute;
+	top: 10px;
+}
+
+.center {
+	position: absolute;
+	top: 150px;
+}
+
+.foot {
+	position: absolute;
+	bottom: 10px;
+}
+</style>
+
+<script type="text/javascript">
+
+	window.onload = function() { 
+		//passValid();
+		//延时执行,只执行一次
+		//setTimeout("setTime()",500);
+		setTime();
+		//每隔500ms执行
+		setInterval("setTime();", 500);
+	}
+
+
+	//密码验证
+	function passValid(){
+		//隐藏
+		document.getElementById("content").style.visibility="hidden";
+		var password=prompt("Please enter password!","")
+		if(password=="wyc"){
+			document.getElementById("content").style.visibility="visible";
+		}else{
+			alert("Incorrect Password! ");
+		}
+	}
+
+	//设置时间
+	function setTime(){
+		var now=new Date();
+		var year=now.getYear();
+		if(year<1990){
+			year=year+1990;
+		}
+		var month=now.getMonth();
+		var date=now.getDate();
+		//时
+		var hours=now.getHours();
+		//分
+		var min=now.getMinutes();
+		//秒
+		var sec=now.getSeconds();
+		//星期
+		var day=now.getDay();
+		var dayArry=["日","一","二","三","四","五","六"];
+		var dayStr=dayArry[day];
+		
+		//日月年
+		var timeStr=year+"-"+formatDate(month)+"-"+formatDate(date);
+		//时分秒
+		timeStr+=" "+formatDate(hours)+":"+formatDate(min)+":"+formatDate(sec);
+		//星期
+		timeStr+=" "+"星期"+dayStr;
+		document.getElementById("dateDiv").innerHTML=timeStr;
+	}
+
+	//格式化
+	function formatDate(srcDate){
+		if(srcDate<10){
+			srcDate = "0"+srcDate; 
+		}
+		return srcDate;
+	}
+
+	//length
+	function keydown(){
+		if(event.keyCode==13) {
+			//Jquery $('#lenth_input').val()
+			var textVal=document.getElementById("lenth_input").value;
+			document.getElementById("result").value=textVal.length;
+		}
+	}
+
+	//substring
+	function keydown2(){
+		if(event.keyCode==13) {
+			var textVal=document.getElementById("substring_input").value;
+			var startVal=document.getElementById("start").value;
+			var endVal=document.getElementById("end").value;
+			var startIndex=0;
+			var endIndex=0;
+			if(startVal){
+				startIndex=startVal;
+			}
+			if(endVal){
+				endIndex=endVal;
+			}
+			if(endVal){
+				document.getElementById("result2").value=textVal.substring(startIndex,endIndex);
+			}else{
+				document.getElementById("result2").value=textVal.substring(startIndex);
+			}
+			
+		}
+	}
+
+
+	//toUpperCase、toLowerCase()
+	function keydown3(){
+		if(event.keyCode==13) {
+			var textVal=document.getElementById("dxx_input").value;
+			var length=textVal.length;
+			
+			document.getElementById("result3").value=textVal.toUpperCase();
+			document.getElementById("result4").value=textVal.toLowerCase();
+
+			var upVal=textVal.substring(0,1).toUpperCase();
+			var lowVal=textVal.substring(1,length).toLowerCase();
+			var resultVal=upVal+lowVal;
+
+			document.getElementById("result5").value=resultVal;
+		}
+	}
+
+	function doWs(){
+		alert('开始调用webservice...........');
+		 $.ajax({
+			 type: "post",
+			 //url: "http://localhost:8066/house",
+			 url: "http://localhost:8068/house_info",
+			 dataType:"json",
+			 async:false, 
+			 data:{ cardno: '2014818724', 
+				 	holdername: '卢茹',
+				 	holdercardno:'340204197308011029'
+			      },
+			 cache :false,
+			 success: function(result){
+						alert(result);
+			 }
+			 });
+
+		 alert('调用webservice结束...........');
+    }
+
+
+	function doWss(){
+		alert('开始调用webservice...........');
+		 $.ajax({
+			 type: "post",
+			 //url: "http://localhost:8066/house",
+			 url: "http://localhost:8099/get_house_info",
+			 dataType:"json",
+			 async:false, 
+			 data:{ cardno: '2014818724', 
+				 	holdername: '卢茹',
+				 	holdercardno:'340204197308011029'
+			      },
+			 cache :false,
+			 success: function(result){
+						alert(result);
+			 }
+			 });
+
+		 alert('调用webservice结束...........');
+    }
+
+
+	
+
+</script>
+</head>
+<body>
+	<div id="content">
+	<div class="top">
+		<div id="dateDiv"></div>
+		<br>
+		<table>
+			<tr>
+				<td>1、lenth： <input type="text" id="lenth_input" onkeydown="keydown()" /> 
+					Result：<input type="text" id="result" />
+				</td>
+			</tr>
+			
+			<tr>
+				<td>2、substring： <input type="text" id="substring_input" onkeydown="keydown2()" /> 
+					  start:<input type="text" id="start" onkeydown="keydown2()" /> 
+					  end:<input type="text" id="end" onkeydown="keydown2()" /> 
+					  Result：<input type="text" id="result2" />
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td>3、大小写：
+				 <input type="text" id="dxx_input" onkeydown="keydown3()" /> 
+					  Result：<input type="text" id="result3" />
+					  		<input type="text" id="result4" />
+					  		<input type="text" id="result5" />
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td>4、大小写：
+				 <input type="button"  onclick="doWs()"  value="调用webservice"/> 
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td>5、大小写：
+				 <input type="button"  onclick="doWss()"  value="调用webservice"/> 
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+	
+	<div class="center">
+		<a href="http://www.oschina.net/" target="_blank">开源社区</a>
+		<a href="http://stackoverflow.com/">stackoverflow</a>
+	</div>
+	
+	<div class="foot">
+		<table>
+			<tr>
+				<td>
+					1、substring(start,end)  start:开始  end:可选（省略则到字符串结尾）  start:开始  lenght：长度  
+					2、substr(start,length)   start:开始  length:可选
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	</div>
+</body>
+</html>
